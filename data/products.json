@@ -1,0 +1,21 @@
+{
+    "products": [
+        {
+            "id": "PROD-001",
+            "name": "Standard smartphone",
+            "dependencies": [
+                "COMP-001",
+                "COMP-002",
+                "COMP-004"
+            ]
+        },
+        {
+            "id": "PROD-002",
+            "name": "Flagship smartphone",
+            "dependencies": [
+                "COMP-002",
+                "COMP-004"
+            ]
+        }
+    ]
+}

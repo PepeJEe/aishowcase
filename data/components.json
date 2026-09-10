@@ -1,0 +1,37 @@
+{
+    "components": [
+        {
+            "id": "COMP-001",
+            "name": "Premium OLED display",
+            "supplier": "SUP-001",
+            "dependencies": [
+                "SUP-001"
+            ]
+        },
+        {
+            "id": "COMP-002",
+            "name": "Mainboard/PCB assembly",
+            "supplier": "SUP-002",
+            "dependencies": [
+                "SUP-002"
+            ]
+        },
+        {
+            "id": "COMP-003",
+            "name": "Memory module",
+            "supplier": "SUP-003",
+            "dependencies": [
+                "SUP-003",
+                "COMP-002"
+            ]
+        },
+        {
+            "id": "COMP-004",
+            "name": "Camera module",
+            "supplier": "SUP-004",
+            "dependencies": [
+                "SUP-004"
+            ]
+        }
+    ]
+}
