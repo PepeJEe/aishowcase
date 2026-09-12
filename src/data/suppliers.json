@@ -4,18 +4,22 @@
             "id": "SUP-001",
             "name": "Display panel supplier",
             "country": "Finland",
-            "reliability": 98,
-            "criticality": 5,
-            "inventory_days": 10,
+            "reliability": 0.98,
+            "criticality": 2,
+            "inventory_days": 17,
+            "lead_time_days": 10,
+            "single_source": false,
             "dependencies": []
         },
         {
             "id": "SUP-002",
             "name": "Chipset supplier",
             "country": "China",
-            "reliability": 96,
+            "reliability": 0.96,
             "criticality": 5,
             "inventory_days": 5,
+            "lead_time_days": 21,
+            "single_source": false,
             "dependencies": [
                 "SUP-001"
             ]
@@ -24,18 +28,22 @@
             "id": "SUP-003",
             "name": "Memory chip supplier",
             "country": "Japan",
-            "reliability": 97,
-            "criticality": 4,
-            "inventory_days": 20,
+            "reliability": 0.97,
+            "criticality": 5,
+            "inventory_days": 7,
+            "lead_time_days": 15,
+            "single_source": true,
             "dependencies": []
         },
         {
             "id": "SUP-004",
             "name": "Camera sensor supplier",
             "country": "Estonia",
-            "reliability": 94,
+            "reliability": 0.94,
             "criticality": 4,
             "inventory_days": 12,
+            "lead_time_days": 7,
+            "single_source": false,
             "dependencies": []
         }
     ]
