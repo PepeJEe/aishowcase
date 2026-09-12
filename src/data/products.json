@@ -3,6 +3,7 @@
         {
             "id": "PROD-001",
             "name": "Standard smartphone",
+            "inventory_days": 15,
             "dependencies": [
                 "COMP-001",
                 "COMP-002",
@@ -12,6 +13,7 @@
         {
             "id": "PROD-002",
             "name": "Flagship smartphone",
+            "inventory_days": 20,
             "dependencies": [
                 "COMP-002",
                 "COMP-004"

@@ -1,11 +1,11 @@
 from httpx import AsyncClient
-from src.config import settings
-from src.logger import logger
+from src.code.config import settings
+from src.code.logger import logger
 
 async def receive_messages(messages):
     try:
-        full_messages = [{"role": "system", "content": settings.SYSTEM_PROMPT}] + messages
-        async with AsyncClient(timeout=120) as client:
+        full_messages = [{"role": "system", "content": messages}]
+        async with AsyncClient(timeout=240) as client:
             response = await client.post(
                 f"{settings.ollama_host}/api/chat",
                 json={

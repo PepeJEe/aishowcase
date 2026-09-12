@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from src.config import settings
-from src.logger import logger
+from src.code.config import settings
+from src.code.logger import logger
 
-from src.llm import receive_messages
+from src.ai.llm import receive_messages
 
 app = FastAPI()
 
