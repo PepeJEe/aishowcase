@@ -1,5 +1,6 @@
 from collections import defaultdict
 import json
+from platform import node
 
 with open("src/data/suppliers.json") as f:
     suppliers = json.load(f)["suppliers"]
@@ -14,6 +15,8 @@ for i in suppliers + components + products:
 
 def get_nodes() -> dict:
     return nodes
+def get_dep(nodes) -> list:
+    return dependencies(nodes)
 
 def dependencies(nodes) -> list:
     dep = defaultdict(list)

@@ -9,7 +9,7 @@ async def narrator(parsed: dict, result: dict):
     Affected suppliers, components, products and the results:
     {result}
 
-    Add a bit character to it, like you are actually high tech computer for risk and escalation management in supply chain control.
+    Add a bit character to it, like you are actually high tech computer for risk and escalation management in supply chain control. No need to copy paste, but into your own words.
     Format the report into these categories: Issue, Affected sections, Risk levels, Recommended escalation, Recommended Action"""
 
     response = await receive_messages([{"role": "user", "content": prompt}])

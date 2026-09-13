@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply chain AI showcase</title>
+</head>
+
+<body>
+    <div id="sup">
+    </div>
+    <div id="chat">
+        <div id="chat-field">hello</div>
+    </div>
+    <form id="input-form">
+        <input type="text" name="text" id="input-field" placeholder="">
+    </form>
+    <script>
+
+        const form = document.getElementById("input-form");
+        const chat_field = document.getElementById("chat-field");
+        const input_field = document.getElementById("input-field");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const text = input_field.value;
+
+            const response = await fetch("/analyze", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ text: text }),
+            })
+
+            const report = await response.text();
+            const formatted = report.replace(/\\n/g, "\n");
+            chat_field.textContent = formatted;
+            console.log(JSON.stringify(report.slice(0, 50)));
+            chat.textContent = report;
+            input_field.value = "";
+        })
+    </script>
+</body>
+
+</html>

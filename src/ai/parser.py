@@ -7,13 +7,13 @@ from src.ai.llm import receive_messages
 
 
 async def parse_event(text: str, supplier_ids: list):
-    prompt = f"""You are JSON extraction tool. Extract only the delayed suppliers ID and number of days from this message
+    prompt = f"""You are JSON extraction tool. Extract only the delayed suppliers ID for example "SUP-001" and number of days from this message
     
     Known supplier IDs: {supplier_ids}
     Message: "{text}"
 
     Respond ONLY a JSON object, absolutely nothing else and in this format:
-    {{"start_id": "SUP-001", "delay_time": 15}}"""
+    {{"start_id": "SUP-00#", "delay_time": number}}"""
 
     response = await receive_messages([{"role": "user", "content": prompt}])
     print("RAW MODEL RESPONSE:", response)

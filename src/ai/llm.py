@@ -4,7 +4,7 @@ from src.code.logger import logger
 
 async def receive_messages(messages):
     try:
-        full_messages = [{"role": "system", "content": messages}]
+        full_messages = [{"role": "system", "content": settings.SYSTEM_PROMPT}] + messages
         async with AsyncClient(timeout=240) as client:
             response = await client.post(
                 f"{settings.ollama_host}/api/chat",
