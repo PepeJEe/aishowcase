@@ -35,8 +35,6 @@
             })
 
             const report = await response.text();
-            const formatted = report.replace(/\\n/g, "\n");
-            chat_field.textContent = formatted;
             console.log(JSON.stringify(report.slice(0, 50)));
             chat.textContent = report;
             input_field.value = "";

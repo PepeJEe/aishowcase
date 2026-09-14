@@ -13,21 +13,11 @@ def criticality_score(criticality: int) -> int:
 
 #Calculate inventory score based on the ratio of inventory days to lead time days
 #how long does supplier have inventory vs how long it takes to get new inventory. The lower the ratio, the better the score.
-def inventory_score(inventory_days: int, lead_time_days: int) -> int:
-    if lead_time_days <= 0:
-        return 0
-    ratio = inventory_days / lead_time_days
-    
-    if ratio <= 0.5:
-        return 20
-    elif ratio <= 1.0:
-        return 15
-    elif ratio <= 1.5:
-        return 10
-    elif ratio <= 2.0:
-        return 5
-    else:
-        return 0
+def inventory_score(inventory_days: int, lead_time_days: int, delay_days: int = 0) -> int:
+    lead_time_risk = min(15, lead_time_days // 5)   # longer lead time = a bit more baseline risk
+    delay_risk = min(35, max(0, delay_days - inventory_days))   # days actually stuck with zero stock
+
+    return lead_time_risk + delay_risk
 
 
 def delivery_score(delivery_reliability: int) -> int:
@@ -50,21 +40,19 @@ def geopolitical_score(country: str) -> int:
 def score_supplier(node: dict) -> dict:
     scores = {
         "criticality_score": criticality_score(node["criticality"]),
-        "inventory_score": inventory_score(node["inventory_days"], node["lead_time_days"]),
+        "inventory_score": inventory_score(node["inventory_days"], node["lead_time_days"], node.get("delay_days", 0)),
         "delivery_score": delivery_score(node["reliability"]),
         "single_source_score": single_source_score(node["single_source"]),
         "geopolitical_score": geopolitical_score(node["country"])
     }
     total = sum(scores.values())
 
-    if total <= 20:
+    if total <= 25:
         risk_level = "LOW"
-    elif total <= 40:
+    elif total <= 50:
         risk_level = "MEDIUM"
-    elif total <= 60:
+    elif total <= 70:
         risk_level = "HIGH"
-    elif total <= 80:
-        risk_level = "VERY HIGH"
     else:
         risk_level = "CRITICAL"
 
@@ -77,10 +65,9 @@ def score_supplier(node: dict) -> dict:
     }
 
 #does node have enough inventory after delay
-def score_with_delay(node: dict, leftover_delay: int):
-    remaining_inventory = (max(0, node["inventory_days"] - leftover_delay)) #if 0, no extra days
+def score_with_delay(node: dict, delay_days: int):
     new_inventory = node.copy()
-    new_inventory["inventory_days"] = remaining_inventory
+    new_inventory["delay_days"] = delay_days
     return score_supplier(new_inventory)
 
 #returns if escalation is needed based on the risk level of the supplier.
@@ -106,7 +93,6 @@ def escalation_management(score_supplier: dict) -> str:
         }
 ESCALATION_CONTACTS ={
     "CRITICAL": ["senior management", "procurement"],
-    "VERY HIGH": ["supply chain manager", "procurement"],
     "HIGH": ["supply chain manager"],
     "MEDIUM": [], "LOW": []
 }
@@ -143,7 +129,8 @@ def analyze_delay_event(nodes, dep_id, start_id, delay_time):
             }
         else:
             results[node_id] = {
-                "incoming_delay_days": leftover_delay
+                "incoming_delay_days": leftover_delay, **new_score_supplier,
+                "has_risk_score": False,
             }
     return results
 
