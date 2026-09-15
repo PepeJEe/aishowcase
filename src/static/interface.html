@@ -35,10 +35,16 @@
                 body: new URLSearchParams({ text: text }),
             })
 
+            input_field.value = "";
+            <!-- input_field.css.setprop('disabled', true) -->
+            <!-- input_field.value = "loading..." -->
+
             const report = await response.text();
             console.log(JSON.stringify(report.slice(0, 50)));
             chat_field.textContent = report;
-            input_field.value = "";
+
+            <!-- input_field.css.setprop('disabled', false) -->
+            <!-- input_field.value = "" -->
         })
     </script>
 </body>
