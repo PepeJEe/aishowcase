@@ -14,8 +14,8 @@ def criticality_score(criticality: int) -> int:
 #Calculate inventory score based on the ratio of inventory days to lead time days
 #how long does supplier have inventory vs how long it takes to get new inventory. The lower the ratio, the better the score.
 def inventory_score(inventory_days: int, lead_time_days: int, delay_days: int = 0) -> int:
-    lead_time_risk = min(15, lead_time_days // 5)   # longer lead time = a bit more baseline risk
-    delay_risk = min(35, max(0, delay_days - inventory_days))   # days actually stuck with zero stock
+    lead_time_risk = min(15, lead_time_days // 5)   # Added longer lead time risk score
+    delay_risk = min(35, max(0, delay_days - inventory_days))
 
     return lead_time_risk + delay_risk
 
@@ -58,7 +58,7 @@ def score_supplier(node: dict) -> dict:
 
     return {
         "supplier_id": node["id"],
-        "supplier_name": node["name"],
+        "name": node["name"],
         "risk_score": total,
         "risk_level": risk_level,
         "breakdown": scores
@@ -101,6 +101,34 @@ def get_escalation_contacts(score_supplier: dict) -> list:
     return ESCALATION_CONTACTS.get(risk_level, [])
 
 
+def component_product_score(node: dict, delay_days: int) -> dict:
+    criticality = node["criticality"] * 10
+
+    delay_risk = min(
+        50,
+        max(0, delay_days - node["inventory_days"]) * 5
+    )
+
+    total = criticality + delay_risk
+
+    if total <= 25:
+        risk_level = "LOW"
+    elif total <= 50:
+        risk_level = "MEDIUM"
+    elif total <= 75:
+        risk_level = "HIGH"
+    else:
+        risk_level = "CRITICAL"
+
+    return {
+        "name": node["name"],
+        "risk_score": total,
+        "risk_level": risk_level,
+        "breakdown": {
+            "criticality_score": criticality,
+            "delay_score": delay_risk
+        }
+    }
 
 
 
@@ -128,9 +156,10 @@ def analyze_delay_event(nodes, dep_id, start_id, delay_time):
                 "contacts": contacts
             }
         else:
+            score = component_product_score(node, leftover_delay)
+
             results[node_id] = {
-                "incoming_delay_days": leftover_delay,
-                "has_risk_score": False,
+                "incoming_delay_days": leftover_delay, **score,
             }
     return results
 

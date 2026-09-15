@@ -3,6 +3,7 @@
         {
             "id": "PROD-001",
             "name": "Standard smartphone",
+            "criticality": 2,
             "inventory_days": 15,
             "dependencies": [
                 "COMP-001",
@@ -13,6 +14,7 @@
         {
             "id": "PROD-002",
             "name": "Flagship smartphone",
+            "criticality": 1,
             "inventory_days": 20,
             "dependencies": [
                 "COMP-002",
