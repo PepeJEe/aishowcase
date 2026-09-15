@@ -27,6 +27,7 @@
             event.preventDefault();
 
             const text = input_field.value;
+            if (!text.trim()) return;
 
             const response = await fetch("/analyze", {
                 method: "POST",
@@ -36,7 +37,7 @@
 
             const report = await response.text();
             console.log(JSON.stringify(report.slice(0, 50)));
-            chat.textContent = report;
+            chat_field.textContent = report;
             input_field.value = "";
         })
     </script>
