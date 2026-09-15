@@ -9,7 +9,7 @@ from src.code.delay import add_delay
 
 
 def criticality_score(criticality: int) -> int:
-    return criticality * 4 # criticality 0-5
+    return criticality * 4 # criticality 0-20
 
 #Calculate inventory score based on the ratio of inventory days to lead time days
 #how long does supplier have inventory vs how long it takes to get new inventory. The lower the ratio, the better the score.
@@ -29,7 +29,7 @@ def single_source_score(single_source: bool) -> int:
 GEOPOLITICAL_SCORE={
     "Finland": 1,
     "China": 5,
-    "Japan": 2,
+    "Japan": 3,
     "Estonia": 1,
 }
 def geopolitical_score(country: str) -> int:
@@ -70,7 +70,7 @@ def score_with_delay(node: dict, delay_days: int):
     new_inventory["delay_days"] = delay_days
     return score_supplier(new_inventory)
 
-#returns if escalation is needed based on the risk level of the supplier.
+#returns: if escalation is needed based on the risk level of the supplier.
 def escalation_management(score_supplier: dict) -> str:
     risk_level = score_supplier["risk_level"]
     if risk_level == "CRITICAL":
@@ -79,7 +79,7 @@ def escalation_management(score_supplier: dict) -> str:
             "requires_human_action": False,
             "details": "Escalate automatically to senior management. Immediate action required.",
         }
-    elif risk_level == "HIGH": #MODIFY LATER
+    elif risk_level == "HIGH":
         return {
             "action": "escalation recommended",
             "requires_human_action": True,
@@ -129,7 +129,7 @@ def analyze_delay_event(nodes, dep_id, start_id, delay_time):
             }
         else:
             results[node_id] = {
-                "incoming_delay_days": leftover_delay, **new_score_supplier,
+                "incoming_delay_days": leftover_delay,
                 "has_risk_score": False,
             }
     return results

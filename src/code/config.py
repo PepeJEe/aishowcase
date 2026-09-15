@@ -1,5 +1,4 @@
 import dotenv
-from src.code.logger import logger
 
 class Settings():
     env_file = ".env"
